@@ -6,52 +6,41 @@ window.onload = function () {
   const TOPEINFERIOR = 300;
   const TOPESUPERIOR = 0;
 
-  const puntosDerecha =0;
- const puntosIzquierda =0;
-
-  let x = 0;
-  let y = 0;
+  //puntuacion del marcador.
+  let puntosDerecha = 0;
+  let puntosIzquierda = 0;
 
   let pelota1;
   let personaje1;
+  /*
   let id;
   let id2;
-
+*/
   let xIzquierda, xDerecha, yUp, yDown;
 
-  var dx = 2;
-  var dy = -2;
+  let valorX_posicion_inicial_pelota = 300;
+  let valorY_posicion_inicial_pelota = 200;
 
-  const movimientoDerecha = [
-    [0, 2],
-    [32, 2],
-  ];
-  const moviminetoIzquierda = [
-    [2, 65],
-    [33, 65],
-  ];
-  const movimientoAbajo = [
-    [0, 32],
-    [32, 32],
-  ];
-  const movimientoArriba = [
-    [0, 97],
-    [33, 97],
-  ];
+  var dx = 5;
+  var dy = -5;
+
+  let velocidadPelota = 1;
+  
 
   function Pelota() {
     this.x = 300;
     this.y = 200;
     this.width = 4;
     this.height = 4;
-    velocidadPelota = 1; // Velocidad variable
     dx = velocidadPelota; // Direcciones de la pelota
-    dy = -velocidadPelota;
+    dy = -velocidadPelota; //
   }
 
   function Persona() {
     this.x = 0;
     this.y = 0;
+    this.x2 = 585;
+    this.y2 = 200;
     this.velocidad = 2;
   }
 
@@ -84,24 +73,44 @@ window.onload = function () {
     pelota1.y += dy;
 
     // Verificar si la pelota choca con los bordes
-    if (pelota1.x + pelota1.width > canvas.width || pelota1.x < 0) {
+    if (this.pelota1.x > this.width || this.pelota1.x + this.pelota1.width < 0) {
+      this.pelota1.vx = -this.pelota1.dx;
+  } else if (this.pelota1.y > this.height || this.pelota1.y + this.pelota1.height < 0) {
+      this.pelota1.vy = -this.pelota1.d;
+  }
+    if (pelota1.x == 0) {//diciendole que el ejex  es doble o triple igual a 0 decimos que cuando toque el borde de la izquierda 
 
-      dx = -dx; // Invertir la dirección en el eje X
+      puntosIzquierda++; //sumo los puntos 
+
+      pelota1.x = valorX_posicion_inicial_pelota; // una vez contado los puntos lo que hago es que regreso la pelota al origen.
+      pelota1.y = valorY_posicion_inicial_pelota;// lo hago para las dos posiciones.
+
+      let objetivo = document.getElementById('puntuacionIzquierda');// cojo la etiqueta que he hecho en el html y le asigono una variable 
+      objetivo.innerHTML = 'Puntuacion Izquierda: ' + puntosIzquierda;// con esa variable de antes le digo que me escriba en el html el numero que quiero.
+
+      //------------------------------------BORRAR-------------------------------------
+      console.log(puntosIzquierda + 'puntos izquierda ');// para comprobarlo en la consola 
+      //------------------------------------BORRAR-------------------------------------
 
     }
-    if (pelota1.y + pelota1.height > canvas.height || pelota1.y < 0) {
-      dy = -dy; // Invertir la dirección en el eje Y
+    if (pelota1.x == 590) {// si no pongo doble o triple no compara
+
+      puntosDerecha++;
+
+      pelota1.x = valorX_posicion_inicial_pelota; // una vez contado los puntos lo que hago es que regreso la pelota al origen.
+      pelota1.y = valorY_posicion_inicial_pelota;// lo hago para las dos posiciones.
+
+
+      let objetivo = document.getElementById('puntuacionDerecha');// cojo la etiqueta que he hecho en el html y le asigono una variable 
+      objetivo.innerHTML = 'Puntuacion Derecha: ' + puntosDerecha;// con esa variable de antes le digo que me escriba en el html el numero que quiero.
+
+      //------------------------------------BORRAR-------------------------------------
+      console.log(puntosDerecha + 'puntos derecha');
+      //------------------------------------BORRAR-------------------------------------
+
 
     }
-    if (pelota1.x + pelota1.width > canvas.width || pelota1.x < 0) {
 
-      console.log(puntosDerecha +1)
-  
-      }
-      if (pelota1.y + pelota1.height > canvas.height || pelota1.y < 0) {
-        console.log(puntosDerecha +1)
-  
-      }
 
     // Dibujar el círculo (pelota) en la nueva posición
     ctx.beginPath();
@@ -123,6 +132,20 @@ window.onload = function () {
     if (xIzquierda) personaje1.generarPosicionIzquierda();
     if (yUp) personaje1.generarPosicionArriba();
     if (yDown) personaje1.generarPosicionAbajo();
+
+
+//--------------------Personaje2 -------------------
+ctx.fillRect(personaje2.x2, personaje2.y2, 10, 100);
+
+//Si la pelota está por encima de personaje2, el personaje se mueve hacia arriba (y2 -= 5).
+//Si la pelota está por debajo de personaje2, el personaje se mueve hacia abajo (y2 += 5)
+  if(pelota1.y - 2 < personaje2.y2) personaje2.y2 -= 0.5;
+  if(pelota1.y - 2 > personaje2.y2) personaje2.y2 += 0.5;
+  if (personaje2.y2 > TOPEINFERIOR) personaje2.y2 = TOPEINFERIOR;
+
+  console.log(personaje2.y2);
+
+
   }
 
   function activaMovimiento(evt) {
@@ -175,14 +198,26 @@ window.onload = function () {
     // Coordenadas del personaje
     const personajeX = personaje1.x;
     const personajeY = personaje1.y;
+    const personajeX2 = personaje2.x2;
+    const personajeY2 = personaje2.y2;
 
     // Verificar si la pelota colisiona con el personaje
     const colisionX =
       pelotaCentroX > personajeX && pelotaCentroX < personajeX + personajeAncho;
     const colisionY =
       pelotaCentroY > personajeY && pelotaCentroY < personajeY + personajeAlto;
+    const colisionX2 =
+      pelotaCentroX > personajeX2 && pelotaCentroX < personajeX2 + personajeAncho;
+    const colisionY2 =
+      pelotaCentroY > personajeY2 && pelotaCentroY < personajeY2 + personajeAlto;
 
     if (colisionX && colisionY) {
+      console.log("¡Colisión detectada!");
+      // Aquí puedes agregar lo que quieres hacer cuando ocurra la colisión, por ejemplo, cambiar la dirección de la pelota.
+      dx = -dx;
+      dy = -dy;
+    }
+    if (colisionX2 && colisionY2) {
       console.log("¡Colisión detectada!");
       // Aquí puedes agregar lo que quieres hacer cuando ocurra la colisión, por ejemplo, cambiar la dirección de la pelota.
       dx = -dx;
@@ -196,6 +231,7 @@ window.onload = function () {
 
     pelota1 = new Pelota();
     personaje1 = new Persona();
+    personaje2 = new Persona();
 
     id = setInterval(pintarPersona, 6);
     id2 = setInterval(pintarCirculo, 6);
