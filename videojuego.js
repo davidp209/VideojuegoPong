@@ -6,34 +6,51 @@ window.onload = function () {
   const TOPEINFERIOR = 300;
   const TOPESUPERIOR = 0;
 
-  //puntuacion del marcador.
   let puntosDerecha = 0;
   let puntosIzquierda = 0;
 
+  let x = 0;
+  let y = 0;
+
   let pelota1;
   let personaje1;
-  /*
   let id;
   let id2;
-*/
+
   let xIzquierda, xDerecha, yUp, yDown;
 
   let valorX_posicion_inicial_pelota = 300;
   let valorY_posicion_inicial_pelota = 200;
 
-  var dx = 5;
-  var dy = -5;
+  var dx = 2;
+  var dy = -2;
 
-  let velocidadPelota = 1;
-  
+  const movimientoDerecha = [
+    [0, 2],
+    [32, 2],
+  ];
+  const moviminetoIzquierda = [
+    [2, 65],
+    [33, 65],
+  ];
+  const movimientoAbajo = [
+    [0, 32],
+    [32, 32],
+  ];
+  const movimientoArriba = [
+    [0, 97],
+    [33, 97],
+  ];
 
   function Pelota() {
     this.x = 300;
     this.y = 200;
     this.width = 4;
     this.height = 4;
+    velocidadPelota = 1; // Velocidad variable
     dx = velocidadPelota; // Direcciones de la pelota
-    dy = -velocidadPelota; //
+    dy = -velocidadPelota;
+    
   }
 
   function Persona() {
@@ -73,11 +90,15 @@ window.onload = function () {
     pelota1.y += dy;
 
     // Verificar si la pelota choca con los bordes
-    if (this.pelota1.x > this.width || this.pelota1.x + this.pelota1.width < 0) {
-      this.pelota1.vx = -this.pelota1.dx;
-  } else if (this.pelota1.y > this.height || this.pelota1.y + this.pelota1.height < 0) {
-      this.pelota1.vy = -this.pelota1.d;
-  }
+    if (pelota1.x + pelota1.width > canvas.width || pelota1.x < 0) {
+
+      dx = -dx; // Invertir la dirección en el eje X
+
+    }
+    if (pelota1.y + pelota1.height > canvas.height || pelota1.y < 0) {
+      dy = -dy; // Invertir la dirección en el eje Y
+
+    }
     if (pelota1.x == 0) {//diciendole que el ejex  es doble o triple igual a 0 decimos que cuando toque el borde de la izquierda 
 
       puntosIzquierda++; //sumo los puntos 
@@ -122,14 +143,15 @@ window.onload = function () {
     colisionDetectada();
   }
 
+
+
   function pintarPersona() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = "blue"; // Cambia el color del personaje
     ctx.fillRect(personaje1.x, personaje1.y, 10, 100);
 
-    if (xDerecha) personaje1.generarPosicionDerecha();
-    if (xIzquierda) personaje1.generarPosicionIzquierda();
+
     if (yUp) personaje1.generarPosicionArriba();
     if (yDown) personaje1.generarPosicionAbajo();
 
@@ -139,24 +161,22 @@ ctx.fillRect(personaje2.x2, personaje2.y2, 10, 100);
 
 //Si la pelota está por encima de personaje2, el personaje se mueve hacia arriba (y2 -= 5).
 //Si la pelota está por debajo de personaje2, el personaje se mueve hacia abajo (y2 += 5)
-  if(pelota1.y - 2 < personaje2.y2) personaje2.y2 -= 0.5;
-  if(pelota1.y - 2 > personaje2.y2) personaje2.y2 += 0.5;
-  if (personaje2.y2 > TOPEINFERIOR) personaje2.y2 = TOPEINFERIOR;
+  if(pelota1.y - 2 < personaje2.y2) personaje2.y2 -=1 ;
+  if(pelota1.y - 2 > personaje2.y2) personaje2.y2 += 1;
+    if(personaje2.y2 >300) {
+      personaje2.y2 = 300;
+    }
+    //if (pelota1.y - 2 > personaje2.y2 && personaje2.y2 < canvas.height - 100) {
+  //personaje2.y2 += 1;
+}
 
-  console.log(personaje2.y2);
 
 
-  }
 
+  
   function activaMovimiento(evt) {
     switch (evt.keyCode) {
-      case 37: // Left arrow
-        xIzquierda = true;
-        break;
-      case 39: // Right arrow
-        xDerecha = true;
-        break;
-      case 38: // Up arrow
+      case 38: // Up arrow 
         yUp = true;
         break;
       case 40: // Down arrow
@@ -167,12 +187,6 @@ ctx.fillRect(personaje2.x2, personaje2.y2, 10, 100);
 
   function desactivaMovimiento(evt) {
     switch (evt.keyCode) {
-      case 37: // Left arrow
-        xIzquierda = false;
-        break;
-      case 39: // Right arrow
-        xDerecha = false;
-        break;
       case 38: // Up arrow
         yUp = false;
         break;
@@ -206,7 +220,7 @@ ctx.fillRect(personaje2.x2, personaje2.y2, 10, 100);
       pelotaCentroX > personajeX && pelotaCentroX < personajeX + personajeAncho;
     const colisionY =
       pelotaCentroY > personajeY && pelotaCentroY < personajeY + personajeAlto;
-    const colisionX2 =
+      const colisionX2 =
       pelotaCentroX > personajeX2 && pelotaCentroX < personajeX2 + personajeAncho;
     const colisionY2 =
       pelotaCentroY > personajeY2 && pelotaCentroY < personajeY2 + personajeAlto;
@@ -238,4 +252,5 @@ ctx.fillRect(personaje2.x2, personaje2.y2, 10, 100);
 
     document.getElementById("botonInicio").disabled = true;
   }
-};
+  }
+
