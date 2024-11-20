@@ -76,36 +76,7 @@ window.onload = function () {
     pelota1.x += dx; //le suma la posicion dela x mas la velocidad de direccion de x
     pelota1.y += dy;
 
-    if (pelota1.x == 0) {
-      //diciendole que el ejex  es doble o triple igual a 0 decimos que cuando toque el borde de la izquierda
-
-      puntosIzquierda++; //sumo los puntos
-
-      pelota1.x = valorX_posicion_inicial_pelota; // una vez contado los puntos lo que hago es que regreso la pelota al origen.
-      pelota1.y = valorY_posicion_inicial_pelota; // lo hago para las dos posiciones.
-
-      let objetivo = document.getElementById("puntuacionIzquierda"); // cojo la etiqueta que he hecho en el html y le asigono una variable
-      objetivo.innerHTML = "Puntuacion Izquierda: " + puntosIzquierda; // con esa variable de antes le digo que me escriba en el html el numero que quiero.
-
-      //------------------------------------BORRAR-------------------------------------
-      console.log(puntosIzquierda + "puntos izquierda "); // para comprobarlo en la consola
-      //------------------------------------BORRAR-------------------------------------
-    }
-    if (pelota1.x == 590) {
-      // si no pongo doble o triple no compara
-
-      puntosDerecha++;
-
-      pelota1.x = valorX_posicion_inicial_pelota; // una vez contado los puntos lo que hago es que regreso la pelota al origen.
-      pelota1.y = valorY_posicion_inicial_pelota; // lo hago para las dos posiciones.
-
-      let objetivo = document.getElementById("puntuacionDerecha"); // cojo la etiqueta que he hecho en el html y le asigono una variable
-      objetivo.innerHTML = "Puntuacion Derecha: " + puntosDerecha; // con esa variable de antes le digo que me escriba en el html el numero que quiero.
-
-      //------------------------------------BORRAR-------------------------------------
-      console.log(puntosDerecha + "puntos derecha");
-      //------------------------------------BORRAR-------------------------------------
-    }
+ 
 
     // Dibujar el círculo (pelota) en la nueva posición
     ctx.beginPath();
