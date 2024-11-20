@@ -1,4 +1,7 @@
-#JuegoCanva { border: solid 1px #ccc; margin: 20px; 
+#JuegoCanva {
+    border: solid 1px #ccc;
+    margin: 20px auto; /* Centrar horizontalmente */
     background: url("assets/imagenes/fondo.jpg");
     background-size: cover;
-};
+    display: block; /* Asegurar que el canvas se comporte como un bloque */
+}
