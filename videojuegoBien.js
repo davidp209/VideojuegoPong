@@ -36,23 +36,47 @@ window.onload = function () {
     velocidadPelota = 1; // Velocidad variable
     dx = velocidadPelota; // Direcciones de la pelota
     dy = -velocidadPelota;
-    this.animacionComecocos = [[0,0],[32,0],
-    [0,65],[32,65],
-    [0,95],[32,95],
-    [0,32],[32,32]];
+    this.animacionPelota = [[5,5],[37,37],
+    [42,5],[74,37],
+    [5,42],[37,74],
+    [42,42],[74,74]];
+    this.imagen = new Image();
+    this.imagen.src = "assets/pelota.png";
+    this.posicion = 0; // Índice para la animación
+    this.tamañoX = 32; // Tamaño del sprite en X
+    this.tamañoY = 32; //
+
   }
+
+  Pelota.prototype.actualizarAnimacion = function() {
+    this.posicion = (this.posicion + 1) % this.animacionPelota.length; // Avanza a la siguiente posición y reinicia al llegar al final
+  };
 
   Pelota.prototype.mover = function () {
     this.x += dx;
     this.y += dy;
   };
 
-  Pelota.prototype.pintar = function () {
-    ctx.beginPath();
-    ctx.arc(pelota1.x, pelota1.y, 10, 0, 2 * Math.PI);
-    ctx.fillStyle = "red";
-    ctx.fill();
+  Pelota.prototype.pintar = function() {
+    ctx.drawImage(this.imagen, // Imagen completa con todos los comecocos (Sprite)
+      this.animacionPelota[this.posicion][0],    // Posicion X del sprite donde se encuentra el comecocos que voy a recortar del sprite para dibujar
+      this.animacionPelota[this.posicion][1],    // Posicion Y del sprite donde se encuentra el comecocos que voy a recortar del sprite para dibujar
+      this.tamañoX, 		  // Tamaño X del comecocos que voy a recortar para dibujar
+      this.tamañoY,	      // Tamaño Y del comecocos que voy a recortar para dibujar
+      this.x,      // Posicion x de pantalla donde voy a dibujar el comecocos recortado
+      this.y,	  // Posicion y de pantalla donde voy a dibujar el comecocos recortado
+      this.tamañoX,		  // Tamaño X del comecocos que voy a dibujar
+      this.tamañoY);       // Tamaño Y del comecocos que voy a dibujar
   };
+
+
+
+
+  
+
+
+
+
   function marcador() {
     if (pelota1.x == 0) {
       //diciendole que el ejex  es doble o triple igual a 0 decimos que cuando toque el borde de la izquierda
@@ -108,6 +132,7 @@ window.onload = function () {
   function animarPelota() {
     pelota1.mover();
     pelota1.pintar();
+    pelota1.actualizarAnimacion(); // Actualiza la animación en cada frame
     marcador();
     colisionConJugador(); 
     colisionDetectada();
