@@ -1,5 +1,4 @@
 window.onload = function () {
-  document.getElementById("botonInicio").onclick = iniciarJuego;
   let puntuacionIzquierda = document.getElementById("puntuacionIzquierda");
   let puntuacionDerecha = document.getElementById("puntuacionDerecha");
 
@@ -11,8 +10,11 @@ window.onload = function () {
   let puntosDerecha = 0;
   let puntosIzquierda = 0;
 
-  let posicion=0;                                         // Posición del array 0, 1, 2, 3, 4, 5, 6, 7
+  let posicion = 0; // Posición del array 0, 1, 2, 3, 4, 5, 6, 7
 
+  let id, id2, id3;
+
+  let ctx, canvas;
 
   let x = 0;
   let y = 0;
@@ -22,60 +24,59 @@ window.onload = function () {
   let valorX_posicion_inicial_pelota = 300;
   let valorY_posicion_inicial_pelota = 200;
 
-  var dx = 2;
-  var dy = -2;
+  //var dx = 2;
+  //var dy = -2;
 
   function Pelota() {
-    this.x = 300;
-    this.y = 200;
-    this.width = 4;
-    this.height = 4;
-    this.radio = 10;
-    this.direccionX = 1; // Dirección horizontal (1 para derecha, -1 para izquierda)
-    this.direccionY = 0; // Dirección vertical (basada en el impacto)
-    velocidadPelota = 1; // Velocidad variable
-    dx = velocidadPelota; // Direcciones de la pelota
-    dy = -velocidadPelota;
-    this.animacionPelota = [[5,5],[37,37],
-    [42,5],[74,37],
-    [5,42],[37,74],
-    [42,42],[74,74]];
-    this.imagen = new Image();
-    this.imagen.src = "assets/pelota.png";
-    this.posicion = 0; // Índice para la animación
-    this.tamañoX = 32; // Tamaño del sprite en X
-    this.tamañoY = 32; //
-
+                    this.x = 300;
+                    this.y = 200;
+                    this.width = 10;
+                    this.height = 50;
+                    this.radio = 10;
+                    this.direccionX = 1; // Dirección horizontal (1 para derecha, -1 para izquierda)
+                    this.direccionY = 0; // Dirección vertical (basada en el impacto)
+                    this.velocidadPelota = 1; // Velocidad variable
+                    this.dx = this.velocidadPelota; // Direcciones de la pelota
+                    this.dy = -this.velocidadPelota;
+                    //animacion de la pelota
+                    this.animacionPelota = [
+                                            [0, 25],
+                                            [396, 25],
+                                            [793, 25],
+                                            [1190, 25],
+                                            ];
+                    this.imagen = new Image();
+                    this.imagen.src = "./assets/imagenes/PELOTA2.png";
+                    this.posicion = 0; // Índice para la animación
+                    this.tamañoX = 396; // Tamaño del sprite en X
+                    this.tamañoY = 424; //
   }
 
-  Pelota.prototype.actualizarAnimacion = function() {
-    this.posicion = (this.posicion + 1) % this.animacionPelota.length; // Avanza a la siguiente posición y reinicia al llegar al final
-  };
+  function actualizarAnimacion() {
+    pelota1.posicion = (pelota1.posicion + 1) % 4; // Avanza a la siguiente posición y reinicia al llegar al final
+  }
 
   Pelota.prototype.mover = function () {
-    this.x += dx;
-    this.y += dy;
+    this.x += this.dx;
+    this.y += this.dy;
+    console.log("MOVER", this.x, this.y);
   };
 
-  Pelota.prototype.pintar = function() {
-    ctx.drawImage(this.imagen, // Imagen completa con todos los comecocos (Sprite)
-      this.animacionPelota[this.posicion][0],    // Posicion X del sprite donde se encuentra el comecocos que voy a recortar del sprite para dibujar
-      this.animacionPelota[this.posicion][1],    // Posicion Y del sprite donde se encuentra el comecocos que voy a recortar del sprite para dibujar
-      this.tamañoX, 		  // Tamaño X del comecocos que voy a recortar para dibujar
-      this.tamañoY,	      // Tamaño Y del comecocos que voy a recortar para dibujar
-      this.x,      // Posicion x de pantalla donde voy a dibujar el comecocos recortado
-      this.y,	  // Posicion y de pantalla donde voy a dibujar el comecocos recortado
-      this.tamañoX,		  // Tamaño X del comecocos que voy a dibujar
-      this.tamañoY);       // Tamaño Y del comecocos que voy a dibujar
+  Pelota.prototype.pintar = function () {
+    console.log("PINTAR: ", this.posicion);
+
+    ctx.drawImage(
+                  this.imagen, // Imagen completa con todos los comecocos (Sprite)
+                  this.animacionPelota[this.posicion][0], // Posicion X del sprite donde se encuentra el comecocos que voy a recortar del sprite para dibujar
+                  this.animacionPelota[this.posicion][1], // Posicion Y del sprite donde se encuentra el comecocos que voy a recortar del sprite para dibujar
+                  this.tamañoX, // Tamaño X del comecocos que voy a recortar para dibujar
+                  this.tamañoY, // Tamaño Y del comecocos que voy a recortar para dibujar
+                  this.x, // Posicion x de pantalla donde voy a dibujar el comecocos recortado
+                  this.y, // Posicion y de pantalla donde voy a dibujar el comecocos recortado
+                  36, // Tamaño X del comecocos que voy a dibujar
+                  36
+    ); // Tamaño Y del comecocos que voy a dibujar
   };
-
-
-
-
-  
-
-
-
 
   function marcador() {
     if (pelota1.x == 0) {
@@ -93,7 +94,7 @@ window.onload = function () {
       console.log(puntosIzquierda + "puntos izquierda "); // para comprobarlo en la consola
       //------------------------------------BORRAR-------------------------------------
     }
-    
+
     if (pelota1.x == 590) {
       // si no pongo doble o triple no compara
 
@@ -109,7 +110,6 @@ window.onload = function () {
       console.log(puntosDerecha + "puntos derecha");
       //------------------------------------BORRAR-------------------------------------
     }
-      
   }
 
   // Normalizar dirección
@@ -122,72 +122,68 @@ window.onload = function () {
   function colisionDetectada() {
     // Verificar si la pelota choca con los bordes
     if (pelota1.x + pelota1.width > canvas.width || pelota1.x < 0) {
-      dx = -dx; // Invertir la dirección en el eje X
+      pelota1.dy = -pelota1.dy; // Invertir la dirección en el eje X
     }
     if (pelota1.y + pelota1.height > canvas.height || pelota1.y < 0) {
-      dy = -dy; // Invertir la dirección en el eje Y
+      pelota1.dy = -pelota1.dy; // Invertir la dirección en el eje Y
     }
   }
 
   function animarPelota() {
     pelota1.mover();
     pelota1.pintar();
-    pelota1.actualizarAnimacion(); // Actualiza la animación en cada frame
     marcador();
-    colisionConJugador(); 
+    colisionConJugador();
     colisionDetectada();
   }
 
   function colisionConJugador() {
-    let pelotaIzq = pelota1.x;
-    let pelotaDer = pelota1.x + pelota1.radio + pelota1.radio;
-    let pelotaArriba = pelota1.y;
-    let pelotaAbajo = pelota1.y + pelota1.radio+ pelota1.radio;
-  
+    // Definir las coordenadas de la pelota considerando su radio
+    let pelotaIzq = pelota1.x - pelota1.radio;
+    let pelotaDer = pelota1.x + pelota1.radio;
+    let pelotaArriba = pelota1.y - pelota1.radio;
+    let pelotaAbajo = pelota1.y + pelota1.radio;
+
+    // Jugador 1 (izquierda)
     let personaje1Izq = personaje1.x;
     let personaje1Der = personaje1.x + personaje1.ancho;
     let personaje1Arriba = personaje1.y;
     let personaje1Abajo = personaje1.y + personaje1.alto;
-  
+
+    // Jugador 2 (derecha)
     let personaje2Izq = personaje2.x2;
     let personaje2Der = personaje2.x2 + personaje2.ancho;
     let personaje2Arriba = personaje2.y2;
     let personaje2Abajo = personaje2.y2 + personaje2.alto;
-  
-console.log(pelotaIzq, "-", pelotaDer);
-console.log(personaje2Izq, "#", personaje2Der);
-console.log(pelotaArriba, "-", pelotaAbajo);
-console.log(personaje2Arriba, "#", personaje2Abajo);
 
-//console.log(personaje2);
+    // Colisión con el jugador 1 (izquierda)
+    if (pelotaDer > personaje1Izq && pelotaIzq < personaje1Der &&
+        pelotaAbajo > personaje1Arriba && pelotaArriba < personaje1Abajo) {
+        // La pelota toca al jugador 1
+        console.log("Colisión con personaje1 detectada");
 
-    // Colisión con personaje1
-    if (
-      pelotaDer > personaje1Izq &&
-      pelotaIzq < personaje1Der &&
-      pelotaArriba > personaje1Abajo &&
-      pelotaAbajo < personaje1Arriba
-    ) {
+        // Rebote horizontal: cambia la dirección de la pelota hacia la derecha
+        pelota1.direccionX = 1;
 
-      console.log("colision con 1")
-      pelota1.direccionX = 1;
-      let impacto = (pelota1.y - (personaje1.y + personaje1.alto / 2)) / (personaje1.alto / 2);
-      pelota1.direccionY = impacto;
-      normalizarDireccion();
+        // Rebote vertical: Calculamos el impacto dependiendo de la posición vertical
+        let impacto = (pelota1.y + pelota1.radio - (personaje1.y + personaje1.alto / 2)) / (personaje1.alto / 2);
+        pelota1.direccionY = impacto; // Ajustar la dirección vertical
+        normalizarDireccion(); // Normalizar para evitar velocidad extraña
     }
-  
-    // Colisión con personaje2
-    if (
-      pelotaDer > personaje2Izq &&
-      pelotaIzq < personaje2Der &&
-      pelotaArriba > personaje2Abajo &&
-      pelotaAbajo < personaje2Arriba
-    ) {
-      console.log("colision con 2")
-      pelota1.direccionX = -1;
-      let impacto = (pelota1.y - (personaje2.y2 + personaje2.alto / 2)) / (personaje2.alto / 2);
-      pelota1.direccionY = impacto;
-      normalizarDireccion();
+
+    // Colisión con el jugador 2 (derecha)
+    if (pelotaDer > personaje2Izq && pelotaIzq < personaje2Der &&
+        pelotaAbajo > personaje2Arriba && pelotaArriba < personaje2Abajo) {
+        // La pelota toca al jugador 2
+        console.log("Colisión con personaje2 detectada");
+
+        // Rebote horizontal: cambia la dirección de la pelota hacia la izquierda
+        pelota1.direccionX = -1;
+
+        // Rebote vertical: Calculamos el impacto dependiendo de la posición vertical
+        let impacto = (pelota1.y + pelota1.radio - (personaje2.y2 + personaje2.alto / 2)) / (personaje2.alto / 2);
+        pelota1.direccionY = impacto; // Ajustar la dirección vertical
+        normalizarDireccion(); // Normalizar para evitar velocidad extraña
     }
 }
 
@@ -196,7 +192,7 @@ console.log(personaje2Arriba, "#", personaje2Abajo);
     this.y = 0;
     this.ancho = 10;
     this.alto = 100;
-    this.x2 = 585;
+    this.x2 = 550;
     this.y2 = 200;
     this.velocidad = 2;
   }
@@ -235,7 +231,7 @@ console.log(personaje2Arriba, "#", personaje2Abajo);
   function animarPersonaje() {
     personaje1.pintar();
     personaje1.mover();
-
+    colisionConJugador();
   }
 
   function activaMovimiento(evt) {
@@ -259,8 +255,6 @@ console.log(personaje2Arriba, "#", personaje2Abajo);
         break;
     }
   }
-  document.addEventListener("keydown", activaMovimiento, false);
-  document.addEventListener("keyup", desactivaMovimiento, false);
 
   function iniciarJuego() {
     canvas = document.getElementById("JuegoCanva");
@@ -272,7 +266,10 @@ console.log(personaje2Arriba, "#", personaje2Abajo);
 
     id = setInterval(animarPersonaje, 6);
     id2 = setInterval(animarPelota, 6);
-
-    document.getElementById("botonInicio").disabled = true;
+    id3 = setInterval(actualizarAnimacion, 1000 / 50);
   }
+
+  document.addEventListener("keydown", activaMovimiento, false);
+  document.addEventListener("keyup", desactivaMovimiento, false);
+  document.getElementById("botonInicio").onclick = iniciarJuego;
 };
