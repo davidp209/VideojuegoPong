@@ -112,22 +112,16 @@ window.onload = function () {
     }
   }
 
-  // Normalizar dirección
-  function normalizarDireccion() {
-    let magnitud = Math.sqrt(pelota1.direccionX ** 2 + pelota1.direccionY ** 2);
-    pelota1.direccionX /= magnitud;
-    pelota1.direccionY /= magnitud;
-  }
-
   function colisionDetectada() {
     // Verificar si la pelota choca con los bordes
     if (pelota1.x + pelota1.width > canvas.width || pelota1.x < 0) {
-      pelota1.dy = -pelota1.dy; // Invertir la dirección en el eje X
+        pelota1.dy = -pelota1.dy; // Invertir la dirección en el eje X
     }
     if (pelota1.y + pelota1.height > canvas.height || pelota1.y < 0) {
-      pelota1.dy = -pelota1.dy; // Invertir la dirección en el eje Y
+        pelota1.dy = -pelota1.dy; // Invertir la dirección en el eje Y
     }
-  }
+}
+
 
   function animarPelota() {
     pelota1.mover();
@@ -136,55 +130,71 @@ window.onload = function () {
     colisionConJugador();
     colisionDetectada();
   }
-
   function colisionConJugador() {
-    // Definir las coordenadas de la pelota considerando su radio
+    // Bordes de la pelota
     let pelotaIzq = pelota1.x - pelota1.radio;
     let pelotaDer = pelota1.x + pelota1.radio;
     let pelotaArriba = pelota1.y - pelota1.radio;
     let pelotaAbajo = pelota1.y + pelota1.radio;
 
-    // Jugador 1 (izquierda)
-    let personaje1Izq = personaje1.x;
-    let personaje1Der = personaje1.x + personaje1.ancho;
-    let personaje1Arriba = personaje1.y;
-    let personaje1Abajo = personaje1.y + personaje1.alto;
+    // Bordes del jugador 1
+    let jugador1Izq = personaje1.x;
+    let jugador1Der = personaje1.x + personaje1.ancho;
+    let jugador1Arriba = personaje1.y;
+    let jugador1Abajo = personaje1.y + personaje1.alto - 10; // Ajuste por el sprite del jugador
 
-    // Jugador 2 (derecha)
-    let personaje2Izq = personaje2.x2;
-    let personaje2Der = personaje2.x2 + personaje2.ancho;
-    let personaje2Arriba = personaje2.y2;
-    let personaje2Abajo = personaje2.y2 + personaje2.alto;
+    // Bordes del jugador 2
+    let jugador2Izq = personaje2.x2;
+    let jugador2Der = personaje2.x2 + personaje2.ancho;
+    let jugador2Arriba = personaje2.y2;
+    let jugador2Abajo = personaje2.y2 + personaje2.alto - 10; // Ajuste por el sprite del jugador
 
-    // Colisión con el jugador 1 (izquierda)
-    if (pelotaDer > personaje1Izq && pelotaIzq < personaje1Der &&
-        pelotaAbajo > personaje1Arriba && pelotaArriba < personaje1Abajo) {
-        // La pelota toca al jugador 1
-        console.log("Colisión con personaje1 detectada");
+    // Colisión con jugador 1
+    if (
+        pelotaDer > jugador1Izq &&              // Pelota toca borde derecho del jugador
+        pelotaIzq < jugador1Der - 20 &&         // Pelota toca borde izquierdo del jugador
+        pelotaAbajo > jugador1Arriba &&         // Pelota toca borde superior del jugador
+        pelotaArriba < jugador1Abajo           // Pelota toca borde inferior del jugador
+    ) {
+      
+      pelota1.direccionX = -Math.abs(pelota1.direccionX); // Rebota a la izquierda
 
-        // Rebote horizontal: cambia la dirección de la pelota hacia la derecha
-        pelota1.direccionX = 1;
+      pelota1.x = jugador2Izq - pelota1.radio; // Ajusta posición fuera del jugador
 
-        // Rebote vertical: Calculamos el impacto dependiendo de la posición vertical
-        let impacto = (pelota1.y + pelota1.radio - (personaje1.y + personaje1.alto / 2)) / (personaje1.alto / 2);
-        pelota1.direccionY = impacto; // Ajustar la dirección vertical
-        normalizarDireccion(); // Normalizar para evitar velocidad extraña
+
+      // Calcula el ángulo basado en la posición relativa del impacto
+
+      let impacto = (pelota1.y - (jugador2.y2 + jugador2.alto / 2)) / (jugador2.alto / 2);
+
+      pelota1.direccionY = impacto * 1.5; // Ajusta el ángulo con factor de rebote más realista
+
+      normalizarDireccion();
     }
 
-    // Colisión con el jugador 2 (derecha)
-    if (pelotaDer > personaje2Izq && pelotaIzq < personaje2Der &&
-        pelotaAbajo > personaje2Arriba && pelotaArriba < personaje2Abajo) {
-        // La pelota toca al jugador 2
-        console.log("Colisión con personaje2 detectada");
+    // Colisión con jugador 2
+    if (
+        pelotaIzq < jugador2Der - 20 &&           // Pelota toca borde derecho del jugador
+        pelotaDer > jugador2Izq &&               // Pelota toca borde izquierdo del jugador
+        pelotaAbajo > jugador2Arriba &&          // Pelota toca borde superior del jugador
+        pelotaArriba < jugador2Abajo            // Pelota toca borde inferior del jugador
+    ) {
+        pelota1.direccionX = -Math.abs(pelota1.direccionX); // Rebota a la izquierda
+        pelota1.x = jugador2Izq - pelota1.radio; // Ajusta posición fuera del jugador
 
-        // Rebote horizontal: cambia la dirección de la pelota hacia la izquierda
-        pelota1.direccionX = -1;
+        // Calcula el ángulo basado en la posición relativa del impacto
+        let impacto = (pelota1.y - (personaje2.y2 + personaje2.alto / 2)) / (personaje2.alto / 2);
+        pelota1.direccionY = impacto * 1.5; // Ajusta el ángulo con factor de rebote más realista
 
-        // Rebote vertical: Calculamos el impacto dependiendo de la posición vertical
-        let impacto = (pelota1.y + pelota1.radio - (personaje2.y2 + personaje2.alto / 2)) / (personaje2.alto / 2);
-        pelota1.direccionY = impacto; // Ajustar la dirección vertical
-        normalizarDireccion(); // Normalizar para evitar velocidad extraña
+        normalizarDireccion();
     }
+}
+
+
+function normalizarDireccion() {
+  // Asegura que la dirección no sea demasiado plana o inclinada
+  let velocidadTotal = Math.sqrt(pelota1.direccionX ** 2 + pelota1.direccionY ** 2);
+  pelota1.direccionX /= velocidadTotal;
+  pelota1.direccionY /= velocidadTotal;
 }
 
   function Persona() {
@@ -214,7 +224,8 @@ window.onload = function () {
     ctx.fillStyle = "blue"; // Cambia el color del personaje
     ctx.fillRect(personaje1.x, personaje1.y, 10, 100);
     ctx.fillRect(personaje2.x2, personaje2.y2, 10, 100);
-  };
+};
+
 
   Persona.prototype.mover = function () {
     if (yUp) personaje1.generarPosicionArriba();
