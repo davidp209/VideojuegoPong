@@ -1,24 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="author" content="David Paredes" />
-    <title>Pong</title>
-    <script src="videojuegoBien.js"></script>
-	<link rel="stylesheet" type="text/css" href="videojuego.css" title="style" />
-  </head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego de Tenis</title>
+  <link rel="stylesheet" href="videojuego.css">
+</head>
 
 <body>
-
-<input type="button" id="botonInicio" value="Inicio"\> 
-
-<canvas id="JuegoCanva" width="600" height="400"></canvas>
-
-<label id="puntuacionIzquierda"></label>
-<label id="puntuacionDerecha"></label>
-
-
-
+  <div id="marcador">
+    <div id="puntuacionIzquierda" class="puntuacion">Puntuación Izquierda: 0</div>
+    <div id="puntuacionDerecha" class="puntuacion">Puntuación Derecha: 0</div>
+  </div>
+  <canvas id="JuegoCanva" width="800" height="400"></canvas>
+  <button id="botonInicio">Iniciar Juego</button>
+  <button id="botonReiniciar" disabled>Reiniciar Juego</button> <!-- Botón de reinicio -->
+  <script src="videojuegoBien.js"></script>
 </body>
 
 </html>
