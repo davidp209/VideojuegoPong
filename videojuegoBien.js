@@ -14,6 +14,11 @@ window.onload = function () {
   let teclaArriba = false;
   let teclaAbajo = false;
 
+  let fpsJuego = 16;
+
+  let golpeEnLosLados, GolpeConElJugador;
+
+
   function Pelota() {
                       this.x = 300;
                       this.y = 200;
@@ -52,6 +57,7 @@ window.onload = function () {
                         // Rebote en los bordes superior e inferior
                         if (this.y - this.radio <= TOPE_SUPERIOR || this.y + this.radio >= TOPE_INFERIOR) {
                           this.dy = -this.dy;
+                           reproducirAudio(golpeEnLosLados);
                         }
 
                         // Evitar trayectorias rectas
@@ -99,6 +105,8 @@ window.onload = function () {
       pelota.y <= jugador1.y + jugador1.alto
     ) {
       pelota.dx = Math.abs(pelota.dx); // Rebota hacia la derecha
+      reproducirAudio(GolpeConElJugador);
+
 
       // Ángulo de rebote según posición del impacto
       let impacto = (pelota.y - (jugador1.y + jugador1.alto / 2)) / (jugador1.alto / 2);
@@ -112,6 +120,8 @@ window.onload = function () {
       pelota.y <= jugador2.y + jugador2.alto
     ) {
       pelota.dx = -Math.abs(pelota.dx); // Rebota hacia la izquierda
+      reproducirAudio(GolpeConElJugador);
+
 
       // Ángulo de rebote según posición del impacto
       let impacto = (pelota.y - (jugador2.y + jugador2.alto / 2)) / (jugador2.alto / 2);
@@ -156,6 +166,7 @@ window.onload = function () {
       jugador2.mover("arriba");
     } else if (pelota.y > jugador2.y + jugador2.alto / 2) {
       jugador2.mover("abajo");
+     
     }
 
     
@@ -164,11 +175,50 @@ window.onload = function () {
     jugador2.dibujar();
     pelota.actualizarAnimacion();
 
-    setInterval(actualizarJuego, 1000/2
-    ); // Aproximadamente 60 FPS
   }
 
+
+
+
+
+  function botonReiniciar() { 
+    clearInterval(id); // Detener la animación
+    puntosIzquierda = 0;
+    puntosDerecha = 0;
+    actualizarMarcador();
+    resetPelota();
+    document.getElementById("botonInicio").disabled = false; // Desactivar el botón de inicio
+    document.getElementById("botonReiniciar").disabled = true; // Activar el botón de reinicio
+
+  }
+
+  function activaMovimiento(evt) {
+    if (evt.keyCode === 38) teclaArriba = true;
+    if (evt.keyCode === 40) teclaAbajo = true;
+}
+
+function desactivaMovimiento(evt) {
+    if (evt.keyCode === 38) teclaArriba = false;
+    if (evt.keyCode === 40) teclaAbajo = false;
+} 
+
+
+
+function reproducirAudio(audio) {
+  audio.currentTime = 0;
+  audio.play();
+}
+
+
+
+
+
   function iniciarJuego() {
+
+    golpeEnLosLados = document.getElementById("golpeEnLosLados");
+    GolpeConElJugador = document.getElementById("GolpeConElJugador");
+
+    
     canvas = document.getElementById("JuegoCanva");
     ctx = canvas.getContext("2d");
 
@@ -176,24 +226,20 @@ window.onload = function () {
     jugador1 = new Jugador(20, canvas.height / 2 - 50,"#3498db"); // Jugador 1
     jugador2 = new Jugador(canvas.width - 30, canvas.height / 2 - 50,"#e74c3c"); // Jugador 2
 
-    actualizarJuego();
+    id = setInterval(actualizarJuego, fpsJuego); // Aproximadamente 60 FPS
     document.getElementById("botonInicio").disabled = true; // Desactivar el botón de inicio
     document.getElementById("botonReiniciar").disabled = false; // Activar el botón de reinicio
 
   }
 
-  // Manejo de teclado
-  document.addEventListener("keydown", function (evt) {
-    if (evt.key === "ArrowUp") teclaArriba = true;
-    if (evt.key === "ArrowDown") teclaAbajo = true;
-  });
 
-  document.addEventListener("keyup", function (evt) {
-    if (evt.key === "ArrowUp") teclaArriba = false;
-    if (evt.key === "ArrowDown") teclaAbajo = false;
-  });
+
+
+  // Manejo de teclado
+  document.addEventListener("keydown", activaMovimiento);
+  document.addEventListener("keyup", desactivaMovimiento);
 
   document.getElementById("botonInicio").onclick = iniciarJuego;
-  document.getElementById("botonReiniciar").onclick = resetPelota;
+  document.getElementById("botonReiniciar").onclick = botonReiniciar;
 
 };
