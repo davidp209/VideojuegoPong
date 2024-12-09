@@ -1,73 +1,155 @@
-#JuegoCanva {
-    border: solid 1px #ccc;
-    margin: 20px auto; /* Centrar horizontalmente */
-    background: url("assets/imagenes/fondo.jpg");
-    background-size: cover;
-    display: block; /* Asegurar que el canvas se comporte como un bloque */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidad */
-    border-radius: 15px; /* Bordes redondeados */
-}
-
-#marcador {
+body {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    width: 80%; /* Ajustar el ancho para que no ocupe todo el ancho de la pantalla */
-    padding: 10px;
-    background: linear-gradient(135deg, #2c3e50, #4a69bd); /* Gradiente de fondo */
-    color: #ecf0f1; /* Color de texto más claro */
-    font-family: 'Arial', sans-serif;
-    font-size: 24px;
-    border-radius: 10px;
-    margin: 20px auto; /* Centrar horizontalmente */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidad */
-    transition: transform 0.3s; /* Transición suave para la transformación */
-}
-
-#marcador:hover {
-    transform: scale(1.05); /* Aumentar ligeramente el tamaño al pasar el ratón */
-}
-
-.puntuacion {
-    padding: 10px 20px;
-    background: linear-gradient(135deg, #34495e, #2c3e50); /* Gradiente de fondo */
-    border-radius: 5px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra interna y externa */
-    text-align: center; /* Centrar el texto */
-    transition: background 0.3s, transform 0.3s; /* Transición suave para el cambio de fondo y transformación */
-}
-
-.puntuacion:hover {
-    background: linear-gradient(135deg, #2c3e50, #34495e); /* Gradiente de fondo al pasar el ratón */
-    transform: scale(1.1); /* Aumentar ligeramente el tamaño al pasar el ratón */
-}
-
-#botonInicio, #botonReiniciar {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    overflow: hidden; /* Evitar el desplazamiento */
+  }
+  
+  #marcador {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    color: #ecf0f1;
+    font-size: 1.5rem;
+    border-radius: 2rem;
+    margin: 1rem auto;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s;
+  }
+  
+  #marcador:hover {
+    transform: scale(1.05);
+  }
+  
+  .puntuacion {
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #34495e, #2c3e50);
+    border-radius: 1.5rem;
+    box-shadow: inset 0 0 0.5rem rgba(0, 0, 0, 0.5), 0 0 0.5rem rgba(0, 0, 0, 0.5);
+    text-align: center;
+    transition: background 0.3s, transform 0.3s;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #f1c40f;
+  }
+  
+  .puntuacion:hover {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    transform: scale(1.1);
+  }
+  
+  #contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%; /* Ajustar el ancho al 100% */
+    max-width: 90vw; /* Ancho máximo para evitar el desbordamiento */
+    margin: 1rem auto;
+    position: relative; /* Permitir posicionamiento absoluto de los hijos */
+  }
+  
+  #JuegoCanva {
+    border: solid 0.1rem #ccc;
+    background: url("assets/imagenes/fondo.jpg") no-repeat center center;
+    background-size: cover;
     display: block;
-    margin: 20px auto; /* Centrar horizontalmente */
-    padding: 10px 20px;
-    font-size: 18px;
-    background: linear-gradient(135deg, #27ae60, #2ecc71); /* Gradiente de fondo */
-    color: #fff; /* Color de texto blanco */
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+    border-radius: 1rem;
+    z-index: 1; /* Asegurar que el canvas esté por encima */
+  }
+  
+  #ganadores {
+    width: 20%;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+    margin-left: 1rem;
+    position: relative; /* Posicionar relativamente */
+    z-index: 0; /* Asegurar que la tabla de ganadores esté debajo del canvas */
+  }
+  
+  #ganadores h2 {
+    text-align: center;
+    color: #34495e;
+  }
+  
+  #listaGanadores {
+    list-style: none;
+    padding: 0;
+  }
+  
+  #listaGanadores li {
+    padding: 0.5rem;
+    border-bottom: 0.1rem solid #ccc;
+    color: #2c3e50;
+  }
+  
+  #listaGanadores li:last-child {
+    border-bottom: none;
+  }
+  
+  #botones {
+    display: flex;
+    justify-content: center;
+    gap: 1rem; /* Espacio entre los botones */
+    margin: 1rem auto;
+  }
+  
+  button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 0.5rem;
     cursor: pointer;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidad */
-    transition: background 0.3s, transform 0.3s; /* Transición suave para el cambio de fondo y transformación */
-}
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
+    transition: background 0.3s, transform 0.3s;
+  }
+  
+  button:hover {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    transform: scale(1.05);
+  }
+  
+  button:active {
+    transform: scale(0.95);
+  }
+  
+  button:disabled {
+    background: linear-gradient(135deg, #bdc3c7, #95a5a6);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    opacity: 0.6;
+  }
 
-#botonInicio:hover, #botonReiniciar:hover {
-    background: linear-gradient(135deg, #2ecc71, #27ae60); /* Gradiente de fondo al pasar el ratón */
-    transform: scale(1.05); /* Aumentar ligeramente el tamaño al pasar el ratón */
-}
-
-#botonInicio:active, #botonReiniciar:active {
-    transform: scale(0.95); /* Reducir ligeramente el tamaño al hacer clic */
-}
-
-#botonInicio:disabled, #botonReiniciar:disabled {
-    background: linear-gradient(135deg, #bdc3c7, #95a5a6); /* Gradiente de fondo para botones desactivados */
-    cursor: not-allowed; /* Cambiar el cursor a no permitido */
-    box-shadow: none; /* Quitar la sombra */
-    transform: none; /* Quitar la transformación */
-}
+  #botonBorrarGanadores {
+    display: block;
+    margin: 1rem auto;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
+    transition: background 0.3s, transform 0.3s;
+  }
+  
+  #botonBorrarGanadores:hover {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    transform: scale(1.05);
+  }
+  
+  #botonBorrarGanadores:active {
+    transform: scale(0.95);
+  }

@@ -7,7 +7,6 @@
   <title>Juego de Tenis</title>
   <link rel="stylesheet" href="videojuego.css">
   <link rel="icon" href="assets/imagenes/favicon.png" type="image/x-icon"> <!-- Ruta al favicon -->
-
 </head>
 
 <body>
@@ -15,14 +14,25 @@
     <div id="puntuacionIzquierda" class="puntuacion">Puntuación Izquierda: 0</div>
     <div id="puntuacionDerecha" class="puntuacion">Puntuación Derecha: 0</div>
   </div>
-  <canvas id="JuegoCanva" width="800" height="400"></canvas>
-  <button id="botonInicio">Iniciar Juego</button>
-  <button id="botonReiniciar" disabled>Reiniciar Juego</button> <!-- Botón de reinicio -->
+  <div id="contenedor">
+    <canvas id="JuegoCanva" width="800" height="400"></canvas>
+    <div id="ganadores">
+      <h2>Top Ganadores</h2>
+      <ul id="listaGanadores"></ul>
+      <button id="botonBorrarGanadores">Borrar Ganadores</button>
+
+    </div>
+  </div>
+  <div id="botones">
+    <button id="botonInicio">Iniciar Juego</button>
+    <button id="botonPausa" disabled>Pausar Juego</button> <!-- Botón de pausa -->
+  </div>
   <script src="videojuegoBien.js"></script>
 
+  <audio id="golpeEnLosLados" src="assets/sonido/bajo_23.mp3"></audio>
+  <audio id="GolpeConElJugador" src="assets/sonido/tenisRaqueta.mp3"></audio>
+  <audio id="Ganador" src="assets/sonido/bites-ta-da-winner.mp3"></audio>
 
-  <audio id="golpeEnLosLados" src="assets/sonido/bajo_23.mp3">
-  <audio id="GolpeConElJugador" src="assets/sonido/tenisRaqueta.mp3">
 
 </body>
 
